@@ -1,0 +1,170 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-g",
+      "-c",
+      "-I",
+      "./src",
+      "-I",
+      "./libft",
+      "-I",
+      "./ft_printf",
+      "-I",
+      "./minilibx-linux",
+      "-o",
+      "bin/main.o",
+      "src/main.c"
+    ],
+    "directory": "/home/jim/dev/fdf",
+    "file": "/home/jim/dev/fdf/src/main.c",
+    "output": "/home/jim/dev/fdf/bin/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-g",
+      "-c",
+      "-I",
+      "./src",
+      "-I",
+      "./libft",
+      "-I",
+      "./ft_printf",
+      "-I",
+      "./minilibx-linux",
+      "-o",
+      "bin/scan.o",
+      "src/scan.c"
+    ],
+    "directory": "/home/jim/dev/fdf",
+    "file": "/home/jim/dev/fdf/src/scan.c",
+    "output": "/home/jim/dev/fdf/bin/scan.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-g",
+      "-c",
+      "-I",
+      "./src",
+      "-I",
+      "./libft",
+      "-I",
+      "./ft_printf",
+      "-I",
+      "./minilibx-linux",
+      "-o",
+      "bin/render.o",
+      "src/render.c"
+    ],
+    "directory": "/home/jim/dev/fdf",
+    "file": "/home/jim/dev/fdf/src/render.c",
+    "output": "/home/jim/dev/fdf/bin/render.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-g",
+      "-c",
+      "-I",
+      "./src",
+      "-I",
+      "./libft",
+      "-I",
+      "./ft_printf",
+      "-I",
+      "./minilibx-linux",
+      "-o",
+      "bin/window.o",
+      "src/window.c"
+    ],
+    "directory": "/home/jim/dev/fdf",
+    "file": "/home/jim/dev/fdf/src/window.c",
+    "output": "/home/jim/dev/fdf/bin/window.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-g",
+      "-c",
+      "-I",
+      "./src",
+      "-I",
+      "./libft",
+      "-I",
+      "./ft_printf",
+      "-I",
+      "./minilibx-linux",
+      "-o",
+      "bin/mat.o",
+      "src/mat.c"
+    ],
+    "directory": "/home/jim/dev/fdf",
+    "file": "/home/jim/dev/fdf/src/mat.c",
+    "output": "/home/jim/dev/fdf/bin/mat.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-g",
+      "-c",
+      "-I",
+      "./src",
+      "-I",
+      "./libft",
+      "-I",
+      "./ft_printf",
+      "-I",
+      "./minilibx-linux",
+      "-o",
+      "bin/vec.o",
+      "src/vec.c"
+    ],
+    "directory": "/home/jim/dev/fdf",
+    "file": "/home/jim/dev/fdf/src/vec.c",
+    "output": "/home/jim/dev/fdf/bin/vec.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-g",
+      "-c",
+      "-I",
+      "./src",
+      "-I",
+      "./libft",
+      "-I",
+      "./ft_printf",
+      "-I",
+      "./minilibx-linux",
+      "-o",
+      "bin/fdf.o",
+      "src/fdf.c"
+    ],
+    "directory": "/home/jim/dev/fdf",
+    "file": "/home/jim/dev/fdf/src/fdf.c",
+    "output": "/home/jim/dev/fdf/bin/fdf.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-g",
+      "-c",
+      "-I",
+      "./src",
+      "-I",
+      "./libft",
+      "-I",
+      "./ft_printf",
+      "-I",
+      "./minilibx-linux",
+      "-o",
+      "bin/util.o",
+      "src/util.c"
+    ],
+    "directory": "/home/jim/dev/fdf",
+    "file": "/home/jim/dev/fdf/src/util.c",
+    "output": "/home/jim/dev/fdf/bin/util.o"
+  }
+]
