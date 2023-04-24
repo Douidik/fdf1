@@ -22,7 +22,8 @@ vec.c \
 window.c \
 camera.c \
 render_map.c \
-render_ui.c
+render_ui.c \
+render_debug.c
 
 SRC_DIR = ./src
 BIN_DIR = ./bin

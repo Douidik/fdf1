@@ -10,7 +10,7 @@ typedef struct s_fdf_window
     int h;
 } t_fdf_window;
 
-t_fdf_window *fdf_window_new(void *mlx, int w, int h, const char *fp);
+t_fdf_window *fdf_window_new(void *mlx, int w, int h, const char *filename);
 t_fdf_window *fdf_window_free(t_fdf_window *window);
 
 #endif

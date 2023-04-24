@@ -35,7 +35,7 @@ void fdf_map_dump(t_fdf_map *map)
     int x;
     int y;
     int prec;
-
+xo
     x = 0;
     y = 0;
     prec = fdf_map_prec(map);

@@ -47,15 +47,11 @@ void fdf_parse_size(t_fdf_parser *parser, t_fdf_map *map)
             map->w++;
     }
     tok = (t_fdf_token){0};
-    while (fdf_scan(parser->src, &tok)->kind & ~(FDF_EOF))
-    {
-        if (tok.kind & FDF_NEWL)
-            map->h++;
-    }
-    if (map->w == 0 && map->h != 0)
-        map->w = 1;
-    if (map->h == 0 && map->w != 0)
-        map->h = 1;
+	while (fdf_scan(parser->src, &tok)->kind & ~(FDF_EOF))
+	{
+		while (fdf_scan(parser->src, &tok)->kind & (FDF_INT | FDF_SPACE));
+		map->h++;
+	}
 }
 
 t_fdf_map *fdf_parse_map(t_fdf_parser *parser, t_fdf_map *map)

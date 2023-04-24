@@ -2,6 +2,7 @@
 #include "map.h"
 #include "render.h"
 #include "window.h"
+#include "util.h"
 #include <math.h>
 #include <mlx.h>
 #include <libft.h>
@@ -35,7 +36,7 @@ void fdf_draw_segment(t_fdf_renderer *rdr, t_fdf_vertex *a, t_fdf_vertex *b)
     s = 0;
     while (s < step)
     {
-        fdf_draw_pixel(rdr, (t_vec2){roundf(p.x), roundf(p.y)}, 0xcafe);
+        fdf_draw_pixel(rdr, (t_vec2){p.x, p.y}, 0xcafe);
         p.x += d.x;
         p.y += d.y;
         s++;
@@ -61,8 +62,8 @@ t_fdf_vertex fdf_vertex_make(t_fdf_map *map, t_fdf_camera *camera, t_mat4 *mvp, 
         return (t_fdf_vertex){.ok = 0};
     p.x = ((v.x / v.w + 1) / 2) * (*camera->w);
     p.y = ((v.y / v.w + 1) / 2) * (*camera->h);
-    if (p.x < 0 || p.x >= *camera->w || p.y < 0 || p.y >= *camera->h)
-        return (t_fdf_vertex){.ok = 0};
+	p.x = fdf_clamp(p.x, 0, *camera->w);
+	p.y = fdf_clamp(p.y, 0, *camera->h);
     return (t_fdf_vertex){1, height, p, (t_vec2){pos.x, pos.y}};
 }
 

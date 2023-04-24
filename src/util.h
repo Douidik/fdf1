@@ -8,6 +8,6 @@
 char *fdf_read_fd(int fd);
 void fdf_min_max(int *array, size_t size, int *min, int *max);
 const char *fdf_filename(const char *fp);
-float fdf_loopf(float x, float min, float max);
+int fdf_clamp(int x, int min, int max);
 
 #endif

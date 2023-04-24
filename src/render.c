@@ -46,7 +46,6 @@ void fdf_draw_pixel(t_fdf_renderer *render, t_vec2 pos, int rgb)
 
 void fdf_render_image(t_fdf_renderer *render)
 {
-    mlx_clear_window(render, render->window->impl);
+    //mlx_clear_window(render, render->window->impl);
     mlx_put_image_to_window(render->mlx, render->window->impl, render->image, 0, 0);
-    render->pos_ui = (t_vec2){16, 16};
 }

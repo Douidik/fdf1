@@ -53,20 +53,26 @@ void fdf_min_max(int *array, size_t size, int *min, int *max)
         return;
     i = 0;
     j = 0;
-    *min = array[0];
-    *max = array[0];
-    while (i < size)
-    {
-        if (*max < array[i])
-            *max = array[i];
-        i++;
-    }
-    while (j < size)
-    {
-        if (*min > array[j])
-            *min = array[j];
-        j++;
-    }
+	if (max != NULL)
+	{
+		*max = array[0];
+		while (i < size)
+		{
+			if (*max < array[i])
+				*max = array[i];
+			i++;
+		}
+	}
+	if (min != NULL)
+	{
+		*min = array[0];
+		while (j < size)
+		{
+			if (*min > array[j])
+				*min = array[j];
+			j++;
+		}
+	}
 }
 
 const char *fdf_filename(const char *fp)
@@ -83,11 +89,11 @@ const char *fdf_filename(const char *fp)
     return (name);
 }
 
-float fdf_loopf(float x, float min, float max)
+int fdf_clamp(int x, int min, int max)
 {
-    if (x > max)
-	return (min);
-    if (x < min)
-        return (max);
-    return (x);
+	if (x > max)
+		return (max);
+	if (x < min)
+		return (min);
+	return (x);
 }
