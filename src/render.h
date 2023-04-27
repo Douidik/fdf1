@@ -18,9 +18,6 @@ typedef struct s_fdf_ui {
 	int x;
 	int y;
 	int h;
-	int w;
-	int pad_x;
-	int pad_y;
 } t_fdf_ui;
 
 typedef struct s_fdf_renderer
@@ -36,10 +33,10 @@ typedef struct s_fdf_renderer
 
 t_fdf_renderer *fdf_renderer_new(void *mlx, struct s_fdf_window *window);
 t_fdf_renderer *fdf_renderer_free(t_fdf_renderer *render);
+void fdf_render_clear(t_fdf_renderer *render);
 void fdf_draw_pixel(t_fdf_renderer *render, t_vec2 pos, int rgb);
 void fdf_draw_map(t_fdf_renderer *render, struct s_fdf_map *map, struct s_fdf_camera *camera);
 void fdf_draw_ui(t_fdf_renderer *render, t_fdf_ui *ui, int rgb, char *str);
-void fdf_draw_ui_boxed(t_fdf_renderer *render, t_fdf_ui *ui, int rgb, char *str);
 void fdf_draw_debug(t_fdf_renderer *render, struct s_fdf *fdf);
 void fdf_render_image(t_fdf_renderer *render);
 

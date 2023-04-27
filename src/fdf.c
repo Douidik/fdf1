@@ -1,6 +1,7 @@
 #include "fdf.h"
 #include "map.h"
 #include "render.h"
+#include "util.h"
 #include "window.h"
 #include <X11/X.h>
 #include <X11/keysym.h>
@@ -20,7 +21,7 @@ t_fdf *fdf_new(t_fdf_map *map, const char *fp)
     fdf = ft_calloc(1, sizeof(t_fdf));
     if (!fdf)
         return (NULL);
-	fdf->filename = fdf_filename(fp);
+    fdf->filename = fdf_filename(fp);
     fdf->map = map;
     fdf->mlx = mlx_init();
     if (!fdf->mlx)
@@ -40,8 +41,6 @@ t_fdf *fdf_free(t_fdf *fdf)
 {
     if (fdf != NULL)
     {
-		if (fdf->filename != NULL)
-			free(fdf->filename);
         if (fdf->window != NULL)
             fdf_window_free(fdf->window);
         if (fdf->render != NULL)
@@ -95,7 +94,10 @@ int fdf_key_hook(int k, t_fdf *fdf)
         zoom = -1;
 
     if (k == XK_Tab)
+    {
         fdf->show_help = !fdf->show_help;
+	fdf->camera.obsolete = 1;
+    }
 
     mov.y = (k == XK_space) - (k == XK_c);
     mov = vec3f_norm(mov);
@@ -120,23 +122,23 @@ int fdf_key_hook(int k, t_fdf *fdf)
 
 int fdf_frame_hook(t_fdf *fdf)
 {
-	t_fdf_ui help_ui;
+    t_fdf_ui help_ui;
 
-	help_ui = (t_fdf_ui){.x = 8, .y = 16, .h = 16};
-    if (fdf->camera.obsolete)
-    {
-        fdf_draw_map(fdf->render, fdf->map, &fdf->camera);
-    }
+    if (!fdf->camera.obsolete)
+	return (0);
+    fdf_render_clear(fdf->render);
+    fdf_draw_map(fdf->render, fdf->map, &fdf->camera);
     fdf_render_image(fdf->render);
     if (fdf->show_help)
     {
-		fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "FDF - Wireframe rasterizer <Help>");
-		fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[Escape] Exit");
-		fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[W/S] Move Forward/Backward");
-		fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[A/D] Move Left/Right");
-		fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[</>] Turn Right/Left");
-		fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[^/v] Turn Up/Down");
-		fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[Tab] Show Debug UI");
+        help_ui = (t_fdf_ui){.x = 8, .y = 16, .h = 16};
+        fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "FDF - Wireframe rasterizer <Help>");
+        fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[Escape] Exit");
+        fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[W/S] Move Forward/Backward");
+        fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[A/D] Move Left/Right");
+        fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[</>] Turn Right/Left");
+        fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[^/v] Turn Up/Down");
+        fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[Tab] Show Debug UI");
     }
     return (0);
 }

@@ -44,8 +44,13 @@ void fdf_draw_pixel(t_fdf_renderer *render, t_vec2 pos, int rgb)
     }
 }
 
+void fdf_render_clear(t_fdf_renderer *render)
+{
+    ft_memset(render->stream, 0, render->window->w * render->window->h * (render->bpp / 8));
+}
+
 void fdf_render_image(t_fdf_renderer *render)
 {
-    //mlx_clear_window(render, render->window->impl);
+    // mlx_clear_window(render, render->window->impl);
     mlx_put_image_to_window(render->mlx, render->window->impl, render->image, 0, 0);
 }

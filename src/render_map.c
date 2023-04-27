@@ -62,8 +62,8 @@ t_fdf_vertex fdf_vertex_make(t_fdf_map *map, t_fdf_camera *camera, t_mat4 *mvp, 
         return (t_fdf_vertex){.ok = 0};
     p.x = ((v.x / v.w + 1) / 2) * (*camera->w);
     p.y = ((v.y / v.w + 1) / 2) * (*camera->h);
-	p.x = fdf_clamp(p.x, 0, *camera->w);
-	p.y = fdf_clamp(p.y, 0, *camera->h);
+    p.x = fdf_clamp(p.x, 0, *camera->w);
+    p.y = fdf_clamp(p.y, 0, *camera->h);
     return (t_fdf_vertex){1, height, p, (t_vec2){pos.x, pos.y}};
 }
 
@@ -76,7 +76,6 @@ void fdf_draw_map(t_fdf_renderer *render, t_fdf_map *map, t_fdf_camera *camera)
 
     y = 0;
     mvp = fdf_camera_mvp(camera);
-    ft_memset(render->stream, 0, *camera->w * *camera->h * (render->bpp / 8));
     while (y < map->h)
     {
         x = 0;

@@ -45,22 +45,22 @@ t_mat4 *fdf_camera_mvp(t_fdf_camera *camera)
 
 void fdf_camera_translate(t_fdf_camera *camera, t_vec3f motion)
 {
-	if (vec3f_null(motion))
-		return;
-	camera->position.x += motion.x;
-	camera->position.y += motion.y;
-	camera->position.z += motion.z;
-	camera->obsolete = 1;
+    if (vec3f_null(motion))
+	return;
+    camera->position.x += motion.x;
+    camera->position.y += motion.y;
+    camera->position.z += motion.z;
+    camera->obsolete = 1;
 }
 
 void fdf_camera_rotate(t_fdf_camera *camera, t_vec3f motion)
 {
     if (vec3f_null(motion))
-		return;
-	camera->rotation.x = fmod(camera->rotation.x - motion.x, 2 * PI);
-	camera->rotation.y = fmod(camera->rotation.y - motion.y, 2 * PI);
-	camera->rotation.z = 0;
-	camera->obsolete = 1;
+	return;
+    camera->rotation.x = fmod(camera->rotation.x - motion.x, 2 * PI);
+    camera->rotation.y = fmod(camera->rotation.y - motion.y, 2 * PI);
+    camera->rotation.z = 0;
+    camera->obsolete = 1;
 }
 
 void fdf_camera_zoom(t_fdf_camera *camera, float amount)
@@ -68,6 +68,6 @@ void fdf_camera_zoom(t_fdf_camera *camera, float amount)
     if (amount != 0)
     {
         camera->zoom += amount;
-		camera->obsolete = 1;
+	camera->obsolete = 1;
     }
 }
