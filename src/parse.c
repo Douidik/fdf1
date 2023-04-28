@@ -80,5 +80,6 @@ t_fdf_map *fdf_parse_map(t_fdf_parser *parser, t_fdf_map *map)
         }
     }
     fdf_min_max(map->buf, map->w * map->h, &map->min, &map->max);
+    map->amplitude = fdf_abs(map->max - map->min) + 1;
     return (map);
 }

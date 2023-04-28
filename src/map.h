@@ -10,6 +10,7 @@ typedef struct s_fdf_map
     size_t h;
     int min;
     int max;
+    int amplitude;
 } t_fdf_map;
 
 t_fdf_map *fdf_map_free(t_fdf_map *map);

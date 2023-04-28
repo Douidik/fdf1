@@ -89,11 +89,10 @@ const char *fdf_filename(const char *fp)
     return (name);
 }
 
-int fdf_clamp(int x, int min, int max)
+int fdf_abs(int x)
 {
-	if (x > max)
-		return (max);
-	if (x < min)
-		return (min);
-	return (x);
+	if (x < 0)
+	    return -x;
+	else
+	    return +x;
 }

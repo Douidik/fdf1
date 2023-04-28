@@ -71,13 +71,13 @@ int fdf_key_hook(int k, t_fdf *fdf)
     rot = (t_vec3f){0};
     zoom = 0;
     if (k == XK_w)
-        mov.z--;
+        mov.z -= 0.5;
     if (k == XK_s)
-        mov.z++;
+        mov.z += 0.5;
     if (k == XK_a)
-        mov.x++;
+        mov.x -= 0.5;
     if (k == XK_d)
-        mov.x--;
+        mov.x += 0.5;
 
     if (k == XK_Right)
         rot.y += 0.1;
@@ -96,10 +96,10 @@ int fdf_key_hook(int k, t_fdf *fdf)
     if (k == XK_Tab)
     {
         fdf->show_help = !fdf->show_help;
-	fdf->camera.obsolete = 1;
+        fdf->camera.obsolete = 1;
     }
 
-    mov.y = (k == XK_space) - (k == XK_c);
+    mov.y = (k == XK_c) - (k == XK_space);
     mov = vec3f_norm(mov);
     fdf_camera_translate(&fdf->camera, mov);
     fdf_camera_rotate(&fdf->camera, rot);
@@ -120,14 +120,68 @@ int fdf_key_hook(int k, t_fdf *fdf)
 /*     return (0); */
 /* } */
 
+/* int fdf_frame_hook(t_fdf *fdf) */
+/* { */
+/*     t_fdf_ui help_ui; */
+
+/*     if (!fdf->camera.obsolete) */
+/* 	return (0); */
+/*     fdf_render_clear(fdf->render); */
+/*     fdf_draw_map(fdf->render, fdf->map, &fdf->camera); */
+/*     fdf_render_image(fdf->render); */
+/*     if (fdf->show_help) */
+/*     { */
+/*         help_ui = (t_fdf_ui){.x = 8, .y = 16, .h = 16}; */
+/*         fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "FDF - Wireframe rasterizer <Help>"); */
+/*         fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[Escape] Exit"); */
+/*         fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[W/S] Move Forward/Backward"); */
+/*         fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[A/D] Move Left/Right"); */
+/*         fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[</>] Turn Right/Left"); */
+/*         fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[^/v] Turn Up/Down"); */
+/*         fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[Tab] Show Debug UI"); */
+/*     } */
+/*     return (0); */
+/* } */
+
+#include <stdio.h>
+#include <time.h>
+
 int fdf_frame_hook(t_fdf *fdf)
 {
     t_fdf_ui help_ui;
 
     if (!fdf->camera.obsolete)
-	return (0);
+        return (0);
     fdf_render_clear(fdf->render);
+
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+
+    /* /\* Gradient test *\/ */
+    /* for (int x = 0; x < fdf->window->w; x++) */
+    /* { */
+    /* 	for (int y = 0; y < fdf->window->h; y++) */
+    /*     { */
+    /* 	    int rgb = fdf_lerp_rgb(x+y, fdf->window->w+fdf->window->h, 0, 0xff00ff); */
+    /* 	    if (fdf->show_help) */
+    /* 		fdf_draw_pixel(fdf->render, (t_vec2){x,y}, rgb); */
+    /* 	    else */
+    /* 		mlx_pixel_put(fdf->mlx, fdf->window->impl, x, y, rgb); */
+    /*     } */
+    /* } */
+
     fdf_draw_map(fdf->render, fdf->map, &fdf->camera);
+    clock_gettime(CLOCK_MONOTONIC, &end);
+
+    unsigned long start_ms = start.tv_sec * 1E3 + start.tv_nsec / 1E6;
+    unsigned long end_ms = end.tv_sec * 1E3 + end.tv_nsec / 1E6;
+    unsigned long elapsed_ms = end_ms - start_ms;
+    char benchmark[64];
+    if (elapsed_ms > 0)
+        snprintf(benchmark, sizeof(benchmark), "%ld ms | %.1f fps", elapsed_ms, 1000.0f / elapsed_ms);
+    else
+        ft_strlcpy(benchmark, "< 0 ms | > 1000 fps", sizeof(benchmark));
+
     fdf_render_image(fdf->render);
     if (fdf->show_help)
     {
@@ -139,6 +193,8 @@ int fdf_frame_hook(t_fdf *fdf)
         fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[</>] Turn Right/Left");
         fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[^/v] Turn Up/Down");
         fdf_draw_ui(fdf->render, &help_ui, 0xffffff, "[Tab] Show Debug UI");
+
+        fdf_draw_ui(fdf->render, &help_ui, fdf_lerp_rgb(elapsed_ms, 300, 0x00ff00, 0xff0000), benchmark);
     }
     return (0);
 }
