@@ -34,41 +34,41 @@ t_fdf_renderer *fdf_renderer_free(t_fdf_renderer *render)
     return (NULL);
 }
 
-/* void fdf_draw_pixel(t_fdf_renderer *render, t_vec2 pos, int rgb) */
-/* { */
-/*     size_t n; */
-/*     int *dst; */
-
-/*     if (pos.x >= 0 && pos.x < render->window->w && pos.y >= 0 && pos.y < render->window->h) */
-/*     { */
-/* 	n = (pos.y * render->w + pos.x * 4); */
-/* 	if (render->endian == FDF_ENDIAN_BIG) */
-/* 	{ */
-/* 	    render->stream[n + 0] = (rgb >> 0x18) & 255; */
-/* 	    render->stream[n + 1] = (rgb >> 0x10) & 255; */
-/* 	    render->stream[n + 2] = (rgb >> 0x08) & 255; */
-/* 	    render->stream[n + 3] = (rgb >> 0x00) & 255; */
-/* 	} */
-/* 	if (render->endian == FDF_ENDIAN_SMALL) */
-/* 	{ */
-/* 	    render->stream[n + 0] = (rgb >> 0x00) & 255; */
-/* 	    render->stream[n + 1] = (rgb >> 0x08) & 255; */
-/* 	    render->stream[n + 2] = (rgb >> 0x10) & 255; */
-/* 	    render->stream[n + 3] = (rgb >> 0x18) & 255; */
-/* 	} */
-/*     } */
-/* } */
-
 void fdf_draw_pixel(t_fdf_renderer *render, t_vec2 pos, int rgb)
 {
     size_t n;
     int *dst;
 
-    n = (pos.y * render->w + pos.x * (render->bpp / 8));
-    dst = (int *)(render->stream + n);
-    rgb = mlx_get_color_value(render->mlx, rgb);
-    *dst = (*dst) ^ ((*dst ^ rgb) & 0xffffff);
+    if (pos.x >= 0 && pos.x < render->window->w && pos.y >= 0 && pos.y < render->window->h)
+    {
+	n = (pos.y * render->w + pos.x * 4);
+	if (render->endian == FDF_ENDIAN_BIG)
+	{
+	    render->stream[n + 0] = (rgb >> 0x18) & 255;
+	    render->stream[n + 1] = (rgb >> 0x10) & 255;
+	    render->stream[n + 2] = (rgb >> 0x08) & 255;
+	    render->stream[n + 3] = (rgb >> 0x00) & 255;
+	}
+	if (render->endian == FDF_ENDIAN_SMALL)
+	{
+	    render->stream[n + 0] = (rgb >> 0x00) & 255;
+	    render->stream[n + 1] = (rgb >> 0x08) & 255;
+	    render->stream[n + 2] = (rgb >> 0x10) & 255;
+	    render->stream[n + 3] = (rgb >> 0x18) & 255;
+	}
+    }
 }
+
+/* void fdf_draw_pixel(t_fdf_renderer *render, t_vec2 pos, int rgb) */
+/* { */
+/*     size_t n; */
+/*     int *dst; */
+    
+/*     n = (pos.y * render->w + pos.x * (render->bpp / 8)); */
+/*     dst = (int *)(render->stream + n); */
+/*     rgb = mlx_get_color_value(render->mlx, rgb); */
+/*     *dst = (*dst) ^ ((*dst ^ rgb) & 0xffffff); */
+/* } */
 
 void fdf_render_clear(t_fdf_renderer *render)
 {

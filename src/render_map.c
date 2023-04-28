@@ -11,11 +11,11 @@
 /* #define FDF_COLOR_MIN (0x000000) */
 /* #define FDF_COLOR_MAX (0xffffff) */
 
-/* #define FDF_COLOR_MIN (0x0000ee) */
-/* #define FDF_COLOR_MAX (0xff00ff) */
+#define FDF_COLOR_MIN (0x6666ee)
+#define FDF_COLOR_MAX (0xee22ee)
 
-#define FDF_COLOR_MIN (0x5C258D)
-#define FDF_COLOR_MAX (0x4389A2)
+/* #define FDF_COLOR_MIN (0x5C258D) */
+/* #define FDF_COLOR_MAX (0x4389A2) */
 
 typedef struct s_fdf_vertex
 {
@@ -46,7 +46,7 @@ void fdf_draw_segment(t_fdf_renderer *rdr, t_fdf_camera *camera, t_fdf_vertex *a
     s = 0;
     while (s++ < step)
     {
-        fdf_draw_pixel(rdr, (t_vec2){p.x, p.y}, fdf_lerp_rgb(s, step, a->color, b->color));
+        fdf_draw_pixel(rdr, (t_vec2){round(p.x), round(p.y)}, fdf_lerp_rgb(s, step, a->color, b->color));
         p.x += d.x;
         p.y += d.y;
     }
@@ -69,8 +69,8 @@ t_fdf_vertex fdf_vertex_make(t_fdf_map *map, t_fdf_camera *camera, t_mat4 *mvp, 
     v.z = pos.y;
     v.w = 1.0;
     v = mat4_mul_vec4(*mvp, v);
-    if (v.z < -v.w)
-        return (t_fdf_vertex){.ok = 0};
+    /* if (v.z < -v.w) */
+        /* return (t_fdf_vertex){.ok = 0}; */
     p.x = (1 - v.x / v.w) * 0.5 * (*camera->w);
     p.y = (1 - v.y / v.w) * 0.5 * (*camera->h);
     return (t_fdf_vertex){1, color, p, (t_vec2){pos.x, pos.y}};

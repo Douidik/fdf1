@@ -29,12 +29,17 @@ t_mat4 *fdf_camera_mvp(t_fdf_camera *camera)
         camera->mvp = mat4_identity();
         camera->m = mat4_identity();
         camera->v = mat4_identity();
-	
-        camera->v = mat4_translation(camera->v, camera->position);
+	camera->p = mat4_perspective(camera->persp);
+
+	camera->v = mat4_translation(camera->v, camera->position);
         camera->m = mat4_rotation(camera->m, camera->rotation);
         camera->m = mat4_scale(camera->m, (t_vec3f){camera->zoom, camera->zoom, camera->zoom});
 	
-        camera->p = mat4_perspective(camera->persp);
+	
+        /* camera->m = mat4_scale(camera->m, (t_vec3f){camera->zoom, camera->zoom, camera->zoom}); */
+        /* camera->v = mat4_translation(camera->v, camera->position); */
+        /* camera->v = mat4_rotation(camera->v, camera->rotation); */
+
         camera->mvp = mat4_mul_mat4(camera->mvp, camera->p);
         camera->mvp = mat4_mul_mat4(camera->mvp, camera->v);
         camera->mvp = mat4_mul_mat4(camera->mvp, camera->m);
@@ -67,7 +72,7 @@ void fdf_camera_zoom(t_fdf_camera *camera, float amount)
 {
     if (amount != 0)
     {
-        camera->zoom += amount;
+        camera->zoom = fmaxf(camera->zoom + amount, 0.0);
 	camera->obsolete = 1;
     }
 }
