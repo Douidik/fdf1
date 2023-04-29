@@ -21,7 +21,7 @@ typedef struct s_fdf
     struct s_fdf_map *map;
     struct s_fdf_window *window;
     struct s_fdf_renderer *render;
-    t_fdf_camera camera;
+    t_fdf_camera cam;
     t_fdf_ui_mode ui_mode;
 } t_fdf;
 

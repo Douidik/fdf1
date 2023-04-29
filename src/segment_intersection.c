@@ -13,8 +13,7 @@ float slope(t_vec2 *a, t_vec2 *b)
 
 t_vec2 segment_intersect_x(t_vec2 *a, t_vec2 *b, int y)
 {
-    // x = x0 + (1 / slope) * (ym - y0) where yw is ymin or ymax
-    return ((t_vec2){(float)a->x + (1.0 / slope(a, b)) * (y - a->y), y});
+    return ((t_vec2){a->x + (1 / slope(a, b)) * (y - a->y), y});
 }
 
 t_vec2 segment_intersect_y(t_vec2 *a, t_vec2 *b, int x)

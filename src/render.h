@@ -14,11 +14,22 @@ typedef enum e_fdf_endian
     FDF_ENDIAN_BIG = 1
 } t_fdf_endian;
 
-typedef struct s_fdf_ui {
-	int x;
-	int y;
-	int h;
+typedef struct s_fdf_ui
+{
+    int x;
+    int y;
+    int h;
 } t_fdf_ui;
+
+typedef struct s_fdf_vertex
+{
+    int ok;
+    int color;
+    t_vec2 point;
+    t_vec2 pos;
+    float dist;
+    struct s_fdf_vertex *adjacent[2];
+} t_fdf_vertex;
 
 typedef struct s_fdf_renderer
 {
@@ -29,12 +40,15 @@ typedef struct s_fdf_renderer
     int bpp;
     int w;
     t_fdf_endian endian;
+    t_fdf_vertex *vs;
+    t_fdf_vertex **vss;
 } t_fdf_renderer;
 
-t_fdf_renderer *fdf_renderer_new(void *mlx, struct s_fdf_window *window);
+t_fdf_renderer *fdf_renderer_new(void *mlx, struct s_fdf_window *window, struct s_fdf_map *map);
 t_fdf_renderer *fdf_renderer_free(t_fdf_renderer *render);
 void fdf_render_clear(t_fdf_renderer *render);
-void fdf_draw_pixel(t_fdf_renderer *render, t_vec2 pos, int rgb);
+void fdf_draw_pixel_rgb(t_fdf_renderer *render, t_vec2 pos, int rgb);
+void fdf_draw_pixel_rgba(t_fdf_renderer *render, t_vec2 pos, int rgb, float alpha);
 void fdf_draw_map(t_fdf_renderer *render, struct s_fdf_map *map, struct s_fdf_camera *camera);
 void fdf_draw_ui(t_fdf_renderer *render, t_fdf_ui *ui, int rgb, char *str);
 void fdf_draw_debug(t_fdf_renderer *render, struct s_fdf *fdf);

@@ -13,5 +13,6 @@ int fdf_abs(int x);
 int fdf_lerp(int t0, int t1, int x0, int x1);
 int fdf_lerp_rgb(int t0, int t1, int x0, int x1);
 void *fdf_memset(void *dst, int value, size_t size);
+void fdf_sort(void **xs, size_t i, size_t j, int (*cmp)(void *, void *));
 
 #endif

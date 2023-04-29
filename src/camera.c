@@ -5,74 +5,74 @@
 
 t_fdf_camera fdf_camera_new(float fov, t_fdf_window *window)
 {
-    t_fdf_camera camera;
+    t_fdf_camera cam;
 
-    camera = (t_fdf_camera){0};
-    camera.w = &window->w;
-    camera.h = &window->h;
-    camera.persp.fov = fov * PI / 180;
-    camera.persp.ratio = ((float)*camera.w) / ((float)*camera.h);
-    camera.persp.znear = 0.1;
-    camera.persp.zfar = 100.0;
-    camera.m = mat4_identity();
-    camera.v = mat4_identity();
-    camera.p = mat4_perspective(camera.persp);
-    camera.zoom = 1;
-    camera.obsolete = 1;
-    return (camera);
+    cam = (t_fdf_camera){0};
+    cam.w = &window->w;
+    cam.h = &window->h;
+    cam.persp.fov = fov * PI / 180;
+    cam.persp.ratio = ((float)*cam.w) / ((float)*cam.h);
+    cam.persp.znear = 0.1;
+    cam.persp.zfar = 100.0;
+    cam.m = mat4_identity();
+    cam.v = mat4_identity();
+    cam.p = mat4_perspective(cam.persp);
+    cam.zoom = 1;
+    cam.obsolete = 1;
+    return (cam);
 }
 
-t_mat4 *fdf_camera_mvp(t_fdf_camera *camera)
+t_mat4 *fdf_camera_mvp(t_fdf_camera *cam)
 {
-    if (camera->obsolete)
+    if (cam->obsolete)
     {
-        camera->mvp = mat4_identity();
-        camera->m = mat4_identity();
-        camera->v = mat4_identity();
-	camera->p = mat4_perspective(camera->persp);
+        cam->mvp = mat4_identity();
+        cam->m = mat4_identity();
+        cam->v = mat4_identity();
+	cam->p = mat4_perspective(cam->persp);
 
-	camera->v = mat4_translation(camera->v, camera->position);
-        camera->m = mat4_rotation(camera->m, camera->rotation);
-        camera->m = mat4_scale(camera->m, (t_vec3f){camera->zoom, camera->zoom, camera->zoom});
+	cam->v = mat4_translation(cam->v, cam->pos);
+        cam->m = mat4_rotation(cam->m, cam->rot);
+        cam->m = mat4_scale(cam->m, (t_vec3f){cam->zoom, cam->zoom, cam->zoom});
 	
 	
-        /* camera->m = mat4_scale(camera->m, (t_vec3f){camera->zoom, camera->zoom, camera->zoom}); */
-        /* camera->v = mat4_translation(camera->v, camera->position); */
-        /* camera->v = mat4_rotation(camera->v, camera->rotation); */
+        /* cam->m = mat4_scale(cam->m, (t_vec3f){cam->zoom, cam->zoom, cam->zoom}); */
+        /* cam->v = mat4_translation(cam->v, cam->pos); */
+        /* cam->v = mat4_rotation(cam->v, cam->rot); */
 
-        camera->mvp = mat4_mul_mat4(camera->mvp, camera->p);
-        camera->mvp = mat4_mul_mat4(camera->mvp, camera->v);
-        camera->mvp = mat4_mul_mat4(camera->mvp, camera->m);
+        cam->mvp = mat4_mul_mat4(cam->mvp, cam->p);
+        cam->mvp = mat4_mul_mat4(cam->mvp, cam->v);
+        cam->mvp = mat4_mul_mat4(cam->mvp, cam->m);
     }
-    camera->obsolete = 0;
-    return (&camera->mvp);
+    cam->obsolete = 0;
+    return (&cam->mvp);
 }
 
-void fdf_camera_translate(t_fdf_camera *camera, t_vec3f motion)
+void fdf_camera_translate(t_fdf_camera *cam, t_vec3f motion)
 {
     if (vec3f_null(motion))
 	return;
-    camera->position.x += motion.x;
-    camera->position.y += motion.y;
-    camera->position.z += motion.z;
-    camera->obsolete = 1;
+    cam->pos.x += motion.x;
+    cam->pos.y += motion.y;
+    cam->pos.z += motion.z;
+    cam->obsolete = 1;
 }
 
-void fdf_camera_rotate(t_fdf_camera *camera, t_vec3f motion)
+void fdf_camera_rotate(t_fdf_camera *cam, t_vec3f motion)
 {
     if (vec3f_null(motion))
 	return;
-    camera->rotation.x = fmod(camera->rotation.x - motion.x, 2 * PI);
-    camera->rotation.y = fmod(camera->rotation.y - motion.y, 2 * PI);
-    camera->rotation.z = 0;
-    camera->obsolete = 1;
+    cam->rot.x = fmod(cam->rot.x - motion.x, 2 * PI);
+    cam->rot.y = fmod(cam->rot.y - motion.y, 2 * PI);
+    cam->rot.z = 0;
+    cam->obsolete = 1;
 }
 
-void fdf_camera_zoom(t_fdf_camera *camera, float amount)
+void fdf_camera_zoom(t_fdf_camera *cam, float amount)
 {
     if (amount != 0)
     {
-        camera->zoom = fmaxf(camera->zoom + amount, 0.0);
-	camera->obsolete = 1;
+        cam->zoom = fmaxf(cam->zoom + amount, 0.0);
+	cam->obsolete = 1;
     }
 }
