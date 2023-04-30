@@ -28,7 +28,6 @@ typedef struct s_fdf_vertex
     t_vec2 point;
     t_vec2 pos;
     float dist;
-    struct s_fdf_vertex *adjacent[2];
 } t_fdf_vertex;
 
 typedef struct s_fdf_renderer
@@ -53,5 +52,8 @@ void fdf_draw_map(t_fdf_renderer *render, struct s_fdf_map *map, struct s_fdf_ca
 void fdf_draw_ui(t_fdf_renderer *render, t_fdf_ui *ui, int rgb, char *str);
 void fdf_draw_debug(t_fdf_renderer *render, struct s_fdf *fdf);
 void fdf_render_image(t_fdf_renderer *render);
+
+void fdf_draw_segment_fast(t_fdf_renderer *render, t_vec2 points[2], int (*shader)(int, int, void *), void *data);
+void fdf_draw_segment_antialiased(t_fdf_renderer *render, t_vec2 points[2], int (*shader)(int, int, void *), void *data);
 
 #endif

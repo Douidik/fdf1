@@ -26,8 +26,10 @@ camera.c \
 render_map.c \
 render_ui.c \
 render_debug.c \
+render_segment.c \
 cohen_sutherland.c \
-segment_intersection.c
+segment_intersection.c \
+sort.c
 
 SRC_DIR = ./src
 BIN_DIR = ./bin

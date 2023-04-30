@@ -106,7 +106,7 @@ void fdf_draw_pixel_rgba(t_fdf_renderer *render, t_vec2 pos, int rgb, float alph
     int *dst;
     int r;
     int g;
-    int b;
+    int b;	
 
     n = (pos.y * render->w + pos.x * (render->bpp / 8));
     dst = (int *)(render->stream + n);

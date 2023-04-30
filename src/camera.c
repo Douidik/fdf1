@@ -1,9 +1,10 @@
 #include "camera.h"
+#include "map.h"
 #include "util.h"
 #include "window.h"
 #include <math.h>
 
-t_fdf_camera fdf_camera_new(float fov, t_fdf_window *window)
+t_fdf_camera fdf_camera_new(float fov, t_fdf_window *window, t_fdf_map *map)
 {
     t_fdf_camera cam;
 
@@ -29,16 +30,15 @@ t_mat4 *fdf_camera_mvp(t_fdf_camera *cam)
         cam->mvp = mat4_identity();
         cam->m = mat4_identity();
         cam->v = mat4_identity();
-	cam->p = mat4_perspective(cam->persp);
+        cam->p = mat4_perspective(cam->persp);
 
-	cam->v = mat4_translation(cam->v, cam->pos);
-        cam->m = mat4_rotation(cam->m, cam->rot);
-        cam->m = mat4_scale(cam->m, (t_vec3f){cam->zoom, cam->zoom, cam->zoom});
-	
-	
-        /* cam->m = mat4_scale(cam->m, (t_vec3f){cam->zoom, cam->zoom, cam->zoom}); */
         /* cam->v = mat4_translation(cam->v, cam->pos); */
-        /* cam->v = mat4_rotation(cam->v, cam->rot); */
+        /* cam->m = mat4_rotation(cam->m, cam->rot); */
+        /* cam->m = mat4_scale(cam->m, (t_vec3f){cam->zoom, cam->zoom, cam->zoom}); */
+
+        cam->m = mat4_scale(cam->m, (t_vec3f){cam->zoom, cam->zoom, cam->zoom});
+        cam->v = mat4_translation(cam->v, cam->pos);
+        cam->v = mat4_rotation(cam->v, cam->rot);
 
         cam->mvp = mat4_mul_mat4(cam->mvp, cam->p);
         cam->mvp = mat4_mul_mat4(cam->mvp, cam->v);
@@ -51,7 +51,7 @@ t_mat4 *fdf_camera_mvp(t_fdf_camera *cam)
 void fdf_camera_translate(t_fdf_camera *cam, t_vec3f motion)
 {
     if (vec3f_null(motion))
-	return;
+        return;
     cam->pos.x += motion.x;
     cam->pos.y += motion.y;
     cam->pos.z += motion.z;
@@ -61,7 +61,7 @@ void fdf_camera_translate(t_fdf_camera *cam, t_vec3f motion)
 void fdf_camera_rotate(t_fdf_camera *cam, t_vec3f motion)
 {
     if (vec3f_null(motion))
-	return;
+        return;
     cam->rot.x = fmod(cam->rot.x - motion.x, 2 * PI);
     cam->rot.y = fmod(cam->rot.y - motion.y, 2 * PI);
     cam->rot.z = 0;
@@ -73,6 +73,6 @@ void fdf_camera_zoom(t_fdf_camera *cam, float amount)
     if (amount != 0)
     {
         cam->zoom = fmaxf(cam->zoom + amount, 0.0);
-	cam->obsolete = 1;
+        cam->obsolete = 1;
     }
 }

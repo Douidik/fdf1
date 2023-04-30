@@ -26,13 +26,13 @@ t_fdf *fdf_new(t_fdf_map *map, const char *fp)
     fdf->mlx = mlx_init();
     if (!fdf->mlx)
         return (ft_printf("Cannot initialize mlx library\n"), fdf_free(fdf));
-    fdf->window = fdf_window_new(fdf->mlx, 1000, 1000, fdf->filename);
+    fdf->window = fdf_window_new(fdf->mlx, 1280, 1000, fdf->filename);
     if (!fdf->window)
         return (ft_printf("Cannot open the window\n"), fdf_free(fdf));
     fdf->render = fdf_renderer_new(fdf->mlx, fdf->window, map);
     if (!fdf->render)
         return (ft_printf("Cannot create the renderer\n"), fdf_free(fdf));
-    fdf->cam = fdf_camera_new(90, fdf->window);
+    fdf->cam = fdf_camera_new(90, fdf->window, fdf->map);
     fdf->ui_mode = FDF_HELP;
     return (fdf);
 }

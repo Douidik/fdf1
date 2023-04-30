@@ -4,10 +4,12 @@
 #include "mat.h"
 
 struct s_fdf_window;
+struct s_fdf_map;
 
 typedef struct s_fdf_camera
 {
     int obsolete;
+    t_vec3f origin;
     t_vec3f pos;
     t_vec3f rot;
     float zoom;
@@ -20,7 +22,7 @@ typedef struct s_fdf_camera
     int *h;
 } t_fdf_camera;
 
-t_fdf_camera fdf_camera_new(float fov, struct s_fdf_window *window);
+t_fdf_camera fdf_camera_new(float fov, struct s_fdf_window *window, struct s_fdf_map *map);
 t_mat4 *fdf_camera_mvp(t_fdf_camera *cam);
 void fdf_camera_translate(t_fdf_camera *cam, t_vec3f motion);
 void fdf_camera_rotate(t_fdf_camera *cam, t_vec3f motion);

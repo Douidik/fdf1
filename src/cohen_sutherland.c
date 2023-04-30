@@ -15,12 +15,12 @@ int viewport_region(t_vec2 *v, int w, int h)
     region = 0;
     if (v->x < 0)
         region |= LEFT;
-    else if (v->x > w)
+    else if (v->x >= w)
         region |= RIGHT;
     if (v->y < 0)
-        region |= BOTTOM;
-    else if (v->y > h)
         region |= TOP;
+    else if (v->y >= h)
+        region |= BOTTOM;
     return (region);
 }
 
@@ -44,11 +44,11 @@ int cohen_sutherland(t_vec2 *a, t_vec2 *b, int w, int h)
     if (region & LEFT)
         *v = segment_intersect_y(a, b, 0);
     else if (region & RIGHT)
-        *v = segment_intersect_y(a, b, w);
+        *v = segment_intersect_y(a, b, w - 1);
     else if (region & BOTTOM)
         *v = segment_intersect_x(a, b, 0);
     else if (region & TOP)
-        *v = segment_intersect_x(a, b, h);
+        *v = segment_intersect_x(a, b, h - 1);
     return (cohen_sutherland(a, b, w, h));
 }
 

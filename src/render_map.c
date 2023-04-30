@@ -8,78 +8,8 @@
 #include <math.h>
 #include <mlx.h>
 
-/* #define FDF_COLOR_MIN (0x000000) */
-/* #define FDF_COLOR_MAX (0xffffff) */
-
 #define FDF_COLOR_MIN (0x6666ee)
 #define FDF_COLOR_MAX (0xee22ee)
-
-/* #define FDF_COLOR_MIN (0x5C258D) */
-/* #define FDF_COLOR_MAX (0x4389A2) */
-
-void fdf_draw_segment_fast(t_fdf_renderer *rdr, t_fdf_camera *cam, t_fdf_vertex *a, t_fdf_vertex *b)
-{
-    t_vec2f d;
-    t_vec2f p;
-    int step;
-    int s;
-
-    if (!a || !b || !a->ok || !b->ok || !cohen_sutherland(&a->point, &b->point, *cam->w, *cam->h))
-        return;
-    d.x = (b->point.x - a->point.x);
-    d.y = (b->point.y - a->point.y);
-    step = fmaxf(fabsf(d.x), fabsf(d.y));
-    if (step != 0)
-    {
-        d.x /= step;
-        d.y /= step;
-    }
-    p = (t_vec2f){a->point.x, a->point.y};
-    s = 0;
-    while (s++ < step)
-    {
-        fdf_draw_pixel_rgb(rdr, (t_vec2){p.x, p.y}, fdf_lerp_rgb(s, step, a->color, b->color));
-        p.x += d.x;
-        p.y += d.y;
-    }
-}
-
-void fdf_draw_segment_antialiased(t_fdf_renderer *rdr, t_fdf_camera *cam, t_fdf_vertex *a, t_fdf_vertex *b)
-{
-    t_vec2f d;
-    t_vec2f p;
-    t_vec2f f;
-    int step;
-    int s;
-
-    if (!a || !b || !a->ok || !b->ok || !cohen_sutherland(&a->point, &b->point, *cam->w, *cam->h))
-        return;
-    d.x = (b->point.x - a->point.x);
-    d.y = (b->point.y - a->point.y);
-    step = fmaxf(fabsf(d.x), fabsf(d.y));
-    if (step != 0)
-    {
-        d.x /= step;
-        d.y /= step;
-    }
-    p = (t_vec2f){a->point.x, a->point.y};
-    s = 0;
-    while (s++ < step)
-    {
-        int color = fdf_lerp_rgb(s, step, a->color, b->color);
-        fdf_draw_pixel_rgba(rdr, (t_vec2){p.x, p.y}, color, 1.0);
-        if (d.x > 0)
-            fdf_draw_pixel_rgba(rdr, (t_vec2){p.x + 1, p.y}, color, 0.7 * (floorf(p.x + 1) - p.x));
-        else if (d.x < 0)
-            fdf_draw_pixel_rgba(rdr, (t_vec2){p.x - 1, p.y}, color, 0.7 * (p.x - ceilf(p.x - 1)));
-        if (d.y < 0)
-            fdf_draw_pixel_rgba(rdr, (t_vec2){p.x, p.y - 1}, color, 0.7 * (p.y - ceilf(p.y - 1)));
-        else if (d.y > 0)
-            fdf_draw_pixel_rgba(rdr, (t_vec2){p.x, p.y + 1}, color, 0.7 * (floorf(p.y + 1) - p.y));
-        p.x += d.x;
-        p.y += d.y;
-    }
-}
 
 t_fdf_vertex fdf_vertex_make(t_fdf_map *map, t_fdf_camera *cam, t_mat4 *mvp, t_vec2 pos)
 {
@@ -107,66 +37,13 @@ t_fdf_vertex fdf_vertex_make(t_fdf_map *map, t_fdf_camera *cam, t_mat4 *mvp, t_v
     return (t_fdf_vertex){1, color, p, (t_vec2){pos.x, pos.y}, dist};
 }
 
-/* void fdf_draw_map(t_fdf_renderer *render, t_fdf_map *map, t_fdf_camera *cam) */
-/* { */
-/*     int x; */
-/*     int y; */
-/*     t_fdf_vertex v[3]; */
-/*     t_mat4 *mvp; */
-
-/*     y = 0; */
-/*     mvp = fdf_camera_mvp(camera); */
-/*     while (y < map->h) */
-/*     { */
-/*         x = 0; */
-/*         while (x < map->w) */
-/*         { */
-/*             v[0] = fdf_vertex_make(map, camera, mvp, (t_vec2){x, y}); */
-/*             if (v[0].ok) */
-/*             { */
-/*                 v[1] = fdf_vertex_make(map, camera, mvp, (t_vec2){x + 1, y}); */
-/*                 v[2] = fdf_vertex_make(map, camera, mvp, (t_vec2){x, y + 1}); */
-/*                 fdf_draw_segment_antialiased(render, camera, &v[0], &v[1]); */
-/*                 fdf_draw_segment_antialiased(render, camera, &v[0], &v[2]); */
-/*             } */
-/*             x++; */
-/*         } */
-/*         y++; */
-/*     } */
-/* } */
-
-/* t_fdf_vertex *fdf_sort_vertices(t_fdf_renderer *render, t_fdf_map *map) */
-/* { */
-/*     t_fdf_vertex tmp; */
-/*     size_t i; */
-/*     size_t size; */
-
-/*     i = 0; */
-/*     size = map->w * map->h; */
-/*     while (i < size - 1) */
-/*     { */
-/*         if (render->vs[i].dist > render->vs[i + 1].dist) */
-/*         { */
-/*             tmp = render->vs[i]; */
-/*             render->vs[i] = render->vs[i + 1]; */
-/*             render->vs[i + 1] = tmp; */
-/*             i = 0; */
-/*         } */
-/*         else */
-/*         { */
-/* 	    i++; */
-/*         } */
-/*     } */
-/*     return (render->vs); */
-/* } */
-
 #include <stdlib.h>
 
 int vertex_dist_cmp(const void *v_, const void *w_)
 {
     const t_fdf_vertex *v = *(t_fdf_vertex **)v_;
     const t_fdf_vertex *w = *(t_fdf_vertex **)w_;
-    
+
     return (w->dist - v->dist);
 }
 
@@ -174,19 +51,36 @@ t_fdf_vertex **fdf_sort_vertices(t_fdf_renderer *render, t_fdf_map *map)
 {
     t_fdf_vertex *tmp;
     size_t i;
-    size_t size;
+    size_t len;
 
-    size = map->w * map->h;
+    len  = map->w * map->h;
     i = 0;
-    while (i < size)
+    while (i < len)
     {
-	render->vss[i] = &render->vs[i];
-	i++;
+        render->vss[i] = &render->vs[i];
+        i++;
     }
-    qsort(render->vss, size, sizeof(t_fdf_vertex *), vertex_dist_cmp);
-    return (render->vss);
+    return (fdf_qsort(render->vss, len, sizeof(t_fdf_vertex *), vertex_dist_cmp));
 }
 
+int fdf_shader_lerp(int s, int step, void *data)
+{
+    return (fdf_lerp_rgb(s, step, ((int *)data)[0], ((int *)data)[1]));
+}
+
+void fdf_draw_vertex(t_fdf_renderer *render, t_fdf_vertex *a, t_fdf_vertex *b)
+{
+    t_vec2 points[2];
+    int colors[2];
+
+    if (!a || !b || !a->ok || !b->ok)
+        return;
+    points[0] = a->point;
+    points[1] = b->point;
+    colors[0] = a->color;
+    colors[1] = b->color;
+    fdf_draw_segment_fast(render, points, fdf_shader_lerp, colors);
+}
 
 void fdf_draw_map(t_fdf_renderer *render, t_fdf_map *map, t_fdf_camera *cam)
 {
@@ -194,6 +88,7 @@ void fdf_draw_map(t_fdf_renderer *render, t_fdf_map *map, t_fdf_camera *cam)
     int y;
     size_t i;
     t_mat4 *mvp;
+    t_fdf_vertex *v;
 
     y = 0;
     mvp = fdf_camera_mvp(cam);
@@ -203,10 +98,6 @@ void fdf_draw_map(t_fdf_renderer *render, t_fdf_map *map, t_fdf_camera *cam)
         while (x < map->w)
         {
             render->vs[y * map->w + x] = fdf_vertex_make(map, cam, mvp, (t_vec2){x, y});
-            if (x < map->w - 1)
-                render->vs[y * map->w + x].adjacent[0] = &render->vs[y * map->w + (x + 1)];
-            if (y < map->h - 1)
-                render->vs[y * map->w + x].adjacent[1] = &render->vs[(y + 1) * map->w + x];
             x++;
         }
         y++;
@@ -215,8 +106,11 @@ void fdf_draw_map(t_fdf_renderer *render, t_fdf_map *map, t_fdf_camera *cam)
     i = 0;
     while (i < map->w * map->h)
     {
-        fdf_draw_segment_antialiased(render, cam, render->vss[i], render->vss[i]->adjacent[0]);
-        fdf_draw_segment_antialiased(render, cam, render->vss[i], render->vss[i]->adjacent[1]);
+	v = render->vss[i];
+	if (v->pos.x + 1 < map->w)
+	    fdf_draw_vertex(render, v, &render->vs[v->pos.y * map->w + (v->pos.x + 1)]);
+	if (v->pos.y + 1 < map->h)
+	    fdf_draw_vertex(render, v, &render->vs[(v->pos.y + 1) * map->w + v->pos.x]);
         i++;
     }
 }
