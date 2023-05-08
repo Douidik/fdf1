@@ -11,13 +11,31 @@ void *fdf_memset(void *dst, int value, size_t size)
     i = 0;
     while (i + sizeof(uint64_t) <= size)
     {
-	(*(uint64_t *)(dst + i)) = qword;
+        (*(uint64_t *)(dst + i)) = qword;
         i += sizeof(uint64_t);
     }
     while (i + sizeof(uint8_t) <= size)
     {
-	(*(uint8_t *)(dst + i)) = byte;
+        (*(uint8_t *)(dst + i)) = byte;
         i += sizeof(uint8_t);
     }
-    return dst;
+    return (dst);
+}
+
+void *fdf_memcpy(void *dst, void *src, size_t size)
+{
+    size_t i;
+
+    i = 0;
+    while (i + sizeof(uint64_t) <= size)
+    {
+        (*(uint64_t *)(dst + i)) = (*(uint64_t *)(src + i));
+        i += sizeof(uint64_t);
+    }
+    while (i + sizeof(uint8_t) <= size)
+    {
+        (*(uint8_t *)(dst + i)) = (*(uint8_t *)(src + i));
+        i += sizeof(uint8_t);
+    }
+    return (dst);
 }

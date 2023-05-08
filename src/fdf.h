@@ -6,13 +6,13 @@
 struct s_fdf_map;
 struct s_fdf_window;
 
-typedef enum s_fdf_ui_mode
+typedef enum s_fdf_ui_tab
 {
     FDF_HELP = 0,
     FDF_DEBUG = 1,
     FDF_CINEMATIC = 2,
-    FDF_UI_MODE_COUNT
-} t_fdf_ui_mode;
+    FDF_UI_TAB_COUNT
+} t_fdf_ui_tab;
 
 typedef struct s_fdf
 {
@@ -22,7 +22,7 @@ typedef struct s_fdf
     struct s_fdf_window *window;
     struct s_fdf_renderer *render;
     t_fdf_camera cam;
-    t_fdf_ui_mode ui_mode;
+    t_fdf_ui_tab ui_tab;
 } t_fdf;
 
 t_fdf *fdf_new(struct s_fdf_map *map, const char *fp);

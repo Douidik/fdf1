@@ -1,19 +1,24 @@
 #include "vec.h"
 #include <math.h>
 
-int vec3f_null(t_vec3f v)
+float vec2_len(t_vec2 v)
 {
-    return v.x == 0 && v.y == 0 && v.z == 0;
+    int len2;
+
+    len2 = v.x * v.x + v.y * v.y;
+    if (len2 != 0)
+	return (sqrtf(len2));
+    return (len2);
 }
 
 float vec3f_len(t_vec3f v)
 {
-    float slen;
+    float len2;
 
-    slen = v.x * v.x + v.y * v.y + v.z * v.z;
-    if (slen != 0.0f)
-        return (sqrtf(slen));
-    return (slen);
+    len2 = v.x * v.x + v.y * v.y + v.z * v.z;
+    if (len2 != 0.0f)
+        return (sqrtf(len2));
+    return (len2);
 }
 
 t_vec3f vec3f_norm(t_vec3f v)

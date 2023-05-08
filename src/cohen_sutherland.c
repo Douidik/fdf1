@@ -18,9 +18,9 @@ int viewport_region(t_vec2 *v, int w, int h)
     else if (v->x >= w)
         region |= RIGHT;
     if (v->y < 0)
-        region |= TOP;
-    else if (v->y >= h)
         region |= BOTTOM;
+    else if (v->y >= h)
+        region |= TOP;
     return (region);
 }
 

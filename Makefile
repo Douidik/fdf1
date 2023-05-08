@@ -18,15 +18,17 @@ parse.c \
 render.c \
 scan.c \
 util.c \
-memset.c \
 lerp.c \
+mem.c \
 vec.c \
 window.c \
 camera.c \
+camera_input.c \
 render_map.c \
 render_ui.c \
-render_debug.c \
 render_segment.c \
+render_cam.c \
+render_pixel.c \
 cohen_sutherland.c \
 segment_intersection.c \
 sort.c
@@ -39,7 +41,7 @@ SRC = $(addprefix $(SRC_DIR)/,$(FILES_C))
 OBJ = $(addprefix $(BIN_DIR)/,$(FILES_C:.c=.o))
 INC = -I $(SRC_DIR) -I $(LIBFT_DIR) -I $(FT_PRINTF_DIR) -I $(MLX_DIR)
 
-#CFLAGS = -g -Wall -Wextra -Werror -lXext -lX11 -lm -lz
+# CFLAGS = -g -Wall -Wextra -Werror -lXext -lX11 -lm -lz
 CFLAGS = -g -lXext -lX11 -lm -lz
 
 all: $(NAME)

@@ -15,10 +15,13 @@ t_mat4 mat4_identity()
 
 t_mat4 mat4_translation(t_mat4 mat, t_vec3f t)
 {
-    mat.m[0][3] = t.x;
-    mat.m[1][3] = t.y;
-    mat.m[2][3] = t.z;
-    return (mat);
+    t_mat4 tsl;
+
+    tsl = mat4_identity();
+    tsl.m[0][3] = t.x;
+    tsl.m[1][3] = t.y;
+    tsl.m[2][3] = t.z;
+    return (mat4_mul_mat4(mat, tsl));
 }
 
 t_mat4 mat4_rotation_x(float x)
@@ -53,15 +56,31 @@ t_mat4 mat4_rotation_y(float y)
     return (mat);
 }
 
+/* t_mat4 mat4_rotation(t_mat4 mat, t_vec3f r) */
+/* { */
+/*     t_mat4 rot; */
+
+/*     rot = mat4_identity(); */
+/*     rot = mat4_mul_mat4(rot, mat4_rotation_x(r.x)); */
+/*     rot = mat4_mul_mat4(rot, mat4_rotation_y(r.y)); */
+/*     mat = mat4_mul_mat4(mat, rot); */
+/*     return (mat); */
+/* } */
+
 t_mat4 mat4_rotation(t_mat4 mat, t_vec3f r)
 {
     t_mat4 rot;
 
+    mat = mat4_mul_mat4(mat, mat4_rotation_x(r.x));
+    mat = mat4_mul_mat4(mat, mat4_rotation_y(r.y));
+    return (mat);
+    
     rot = mat4_identity();
+    rot = mat4_mul_mat4(rot, mat);
     rot = mat4_mul_mat4(rot, mat4_rotation_x(r.x));
     rot = mat4_mul_mat4(rot, mat4_rotation_y(r.y));
-    mat = mat4_mul_mat4(mat, rot);
-    return (mat);
+    /* mat = mat4_mul_mat4(mat, rot); */
+    return (rot);
 }
 
 t_mat4 mat4_scale(t_mat4 mat, t_vec3f s)

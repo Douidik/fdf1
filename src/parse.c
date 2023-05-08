@@ -58,7 +58,6 @@ t_fdf_map *fdf_parse_map(t_fdf_parser *parser, t_fdf_map *map)
 {
     t_fdf_token tok;
     t_vec2 pos;
-    size_t len;
 
     fdf_parse_size(parser, map);
     map->buf = ft_calloc(map->w * map->h, sizeof(int));

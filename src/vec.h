@@ -13,6 +13,12 @@ typedef struct s_vec2f
     float y;
 } t_vec2f;
 
+typedef struct s_vec3 {
+    int x;
+    int y;
+    int z;
+} t_vec3;
+
 typedef struct s_vec3f
 {
     float x;
@@ -28,7 +34,9 @@ typedef struct s_vec4f
     float w;
 } t_vec4f;
 
-int vec3f_null(t_vec3f v);
+float vec2_len(t_vec2 v);
+// TODO! use vec3f on map rendering
+float vec3f_dist(t_vec3f a, t_vec3f b);
 float vec3f_len(t_vec3f v);
 t_vec3f vec3f_norm(t_vec3f v);
 t_vec3f vec3f_scale(t_vec3f v, float s);

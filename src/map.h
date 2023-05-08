@@ -6,8 +6,8 @@
 typedef struct s_fdf_map
 {
     int *buf;
-    size_t w;
-    size_t h;
+    int w;
+    int h;
     int min;
     int max;
     int amplitude;

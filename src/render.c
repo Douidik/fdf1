@@ -5,6 +5,7 @@
 #include <libft.h>
 #include <mlx.h>
 #include <stdlib.h>
+#include <math.h>
 
 t_fdf_renderer *fdf_renderer_new(void *mlx, t_fdf_window *window, t_fdf_map *map)
 {
@@ -13,7 +14,9 @@ t_fdf_renderer *fdf_renderer_new(void *mlx, t_fdf_window *window, t_fdf_map *map
     render = ft_calloc(1, sizeof(t_fdf_renderer));
     if (!render)
         return (NULL);
+    render->technique = FDF_SEGMENT_NAIVE;
     render->mlx = mlx;
+    render->map = map;
     render->window = window;
     render->image = mlx_new_image(mlx, window->w, window->h);
     if (!render->image)
@@ -24,8 +27,8 @@ t_fdf_renderer *fdf_renderer_new(void *mlx, t_fdf_window *window, t_fdf_map *map
     render->vs = ft_calloc(map->w * map->h, sizeof(t_fdf_vertex));
     if (!render->vs)
         return (fdf_renderer_free(render));
-    render->vss = ft_calloc(map->w * map->h, sizeof(t_fdf_vertex*));
-    if (!render->vss)
+    render->depth = ft_calloc(window->w * window->h, sizeof(float));
+    if (!render->depth)
         return (fdf_renderer_free(render));
     return (render);
 }
@@ -36,10 +39,10 @@ t_fdf_renderer *fdf_renderer_free(t_fdf_renderer *render)
     {
         if (render->image != NULL)
             mlx_destroy_image(render->mlx, render->image);
-	if (render->vs != NULL)
-	    free(render->vs);
-	if (render->vss != NULL)
-	    free(render->vss);
+        if (render->vs != NULL)
+            free(render->vs);
+        if (render->depth != NULL)
+            free(render->depth);
         free(render);
     }
     return (NULL);
@@ -95,30 +98,13 @@ t_fdf_renderer *fdf_renderer_free(t_fdf_renderer *render)
 /*     } */
 /* } */
 
-void fdf_draw_pixel_rgb(t_fdf_renderer *render, t_vec2 pos, int rgb)
-{
-    *(int *)(render->stream + pos.y * render->w + pos.x * (render->bpp / 8)) = rgb;
-}
-
-void fdf_draw_pixel_rgba(t_fdf_renderer *render, t_vec2 pos, int rgb, float alpha)
-{
-    size_t n;
-    int *dst;
-    int r;
-    int g;
-    int b;	
-
-    n = (pos.y * render->w + pos.x * (render->bpp / 8));
-    dst = (int *)(render->stream + n);
-    r = (1 - alpha) * (*dst & 255) + alpha * (rgb & 255);
-    g = (1 - alpha) * (*dst >> 8 & 255) + alpha * (rgb >> 8 & 255);
-    b = (1 - alpha) * (*dst >> 16 & 255) + alpha * (rgb >> 16 & 255);
-    *dst = r | (g << 8) | (b << 16);
-}
-
 void fdf_render_clear(t_fdf_renderer *render)
 {
     fdf_memset(render->stream, 0, render->window->w * render->window->h * (render->bpp / 8));
+    /* fdf_memset(render->depth, 0, render->window->w * render->window->h * sizeof(float)); */
+    // TODO! TEMP
+    for (int i = 0; i < render->window->w * render->window->h; i++)
+	render->depth[i] = INFINITY;
 }
 
 void fdf_render_image(t_fdf_renderer *render)
